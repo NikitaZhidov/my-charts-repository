@@ -1,0 +1,36 @@
+.wrapper {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.select-area{
+    display: flex;
+    justify-content: center;
+}
+.my-btn {
+    margin-right: 30px;
+    padding: 10px 30px;
+    border-radius: 25px;
+    background-color: #96abd6;
+    outline: none;
+    border: 1px solid #000;
+}
+
+.my-btn:hover {
+    background-color: lightblue;
+}
+
+.my-btn:active {
+    background-color: #59baab;
+}
+
+.my-btn:focus {
+    outline: none;
+}
+
+.stddev-btn{}
+.mean-btn{}
+.maxdev-btn{}
