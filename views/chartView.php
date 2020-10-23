@@ -11,18 +11,37 @@
 </head>
 <body>
     <div class="wrapper">
-        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+        <div id="chartContainer">
+            <canvas id="myChart" width="600" height="400"></canvas>
+        </div>
+
         <div class="select-area">
-            <button class="stddev-btn my-btn" data-value="stdDev">stdDev</button>
-            <button class="mean-btn my-btn" data-value="mean">mean</button>
-            <button class="maxdev-btn my-btn" data-value="maxDev">maxDev</button>
+            <?php foreach ($dataPoints as $targetKey => $targetArrays): ?>
+                <button class="my-btn" data-value="<?php echo $targetKey; ?>"><?php echo $targetKey; ?></button>
+            <?php endforeach; ?>
+            <button class="my-btn zoom-reset">zoom reset</button>
         </div>
     </div>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+    <!--  Подключение необходимых библиотек  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
+
     <script type="text/javascript">
+
+        // Данные
         let dataPoints = <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>;
-        console.log(dataPoints);
+
+        // Значение для отображения
+        let targetValue = Object.keys(dataPoints)[0];
+
     </script>
-    <script src="../resources/js/chart.js"></script>
+    <!--  Подключение js файла с диаграммой   -->
+    <script src="../resources/js/myChart.js"></script>
 </body>
 </html>
