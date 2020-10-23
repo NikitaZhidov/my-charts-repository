@@ -51,7 +51,7 @@
    </div>
    ```
    
-   + Настройки диаграммы Сhart.js находятся в файле ***/resources/js/chartCanvas.js***
+   + Настройки диаграммы Сhart.js находятся в файле ***/resources/js/myChart.js***
    ```js
    let lineChart = new Chart (ctx, chartOptions);
    ```
