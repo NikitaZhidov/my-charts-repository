@@ -292,10 +292,10 @@ window.onload = function() {
             updateChart(chart, multiplier);
         };
 
-        xhr.open('POST', "indexAJAX.php");
+        xhr.open('POST', "index.php");
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         let token = "SOME_TOKEN";
         xhr.setRequestHeader("X-CSRF-Token", token);
-        xhr.send(`timeRangeFrom=${from/MS_IN_SECONDS}&timeRangeTo=${to/MS_IN_SECONDS}`);
+        xhr.send(`timeRangeFrom=${from/MS_IN_SECONDS}&timeRangeTo=${to/MS_IN_SECONDS}&isAjax=true`);
     }
 };

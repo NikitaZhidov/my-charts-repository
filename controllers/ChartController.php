@@ -31,10 +31,15 @@ class ChartController
         } else {
             $dataPoints = Chart::getDataInRange($timeRange['maxDate'] - 3600, $timeRange['maxDate']);
         }
-        $_POST = array();
 
-        // Отображаем
-        require_once ROOT . '/views/chartView.php';
+        
+        if (array_key_exists('isAjax', $_POST)) {
+            echo json_encode($dataPoints);
+        } else {
+            // Отображаем
+            require_once ROOT . '/views/chartView.php';
+        }
+        $_POST = array();
 
         return true;
 
