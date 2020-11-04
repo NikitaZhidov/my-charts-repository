@@ -3,37 +3,10 @@
 
 class Chart
 {
-    public static function getLatestData() {
 
-        $db = Db::getConnection();
-
-        // Получаем настройки отображения данных
-        $settingsPath = ROOT.'/config/data_settings.php';
-        $data_settings = include ($settingsPath);
-
-        // Имя таблицы
-        $table_name = $data_settings['table_name'];
-
-        // Количество отображаемых данных
-        $count_values_to_display = $data_settings['count_values_to_display'];
-
-        // Целевые значения для отображения
-        $target_values = $data_settings['target_values'];
-
-        // Целевое значения для отображения на оси X
-        $target_value_axisX = $data_settings['target_value_axisX'];
-
-        //Выбираем последние данные из конца таблицы
-        $statement = $db->select("SELECT * FROM ". $table_name
-                                ." WHERE type='value_changed'"
-                                ." ORDER BY ".$target_value_axisX." DESC"
-                                ." LIMIT ".$count_values_to_display);
-
-        $data = $statement->rows();
-
-        // Развернем, чтобы отсортировать по времени
-        $data = array_reverse($data);
-
+    // Метод преобразущий выборку данных из бд
+    // в массив, который можно использовать для графиков
+    private static function getDataPoints($data, $target_values, $target_value_axisX) {
         // Массив для данных
         $data_points = [];
 
@@ -105,7 +78,106 @@ class Chart
         }
 
         return $data_points;
+    }
 
+    // Возвращает последние $count_last_values_to_display значений
+    public static function getLatestData() {
+
+        $db = Db::getConnection();
+
+        // Получаем настройки отображения данных
+        $settingsPath = ROOT.'/config/data_settings.php';
+        $data_settings = include ($settingsPath);
+
+        // Имя таблицы
+        $table_name = $data_settings['table_name'];
+
+        // Количество отображаемых данных
+        $count_last_values_to_display = 2000;
+
+        // Целевые значения для отображения
+        $target_values = $data_settings['target_values'];
+
+        // Целевое значения для отображения на оси X
+        $target_value_axisX = $data_settings['target_value_axisX'];
+
+        //Выбираем последние данные из конца таблицы
+        $statement = $db->select("SELECT * FROM ". $table_name
+                                ." WHERE type='value_changed'"
+                                ." ORDER BY ".$target_value_axisX." DESC"
+                                ." LIMIT ".$count_last_values_to_display);
+
+        $data = $statement->rows();
+
+        // Развернем, чтобы отсортировать по времени
+        $data = array_reverse($data);
+
+        return self::getDataPoints($data, $target_values, $target_value_axisX);
+
+    }
+
+    // Возвращает весь возможный временной диапазон
+    public static function getTimeRange() {
+        $db = Db::getConnection();
+
+        $settingsPath = ROOT.'/config/data_settings.php';
+        $data_settings = include ($settingsPath);
+
+        $time_range = array();
+
+        $table_name = $data_settings['table_name'];
+        $target_value_axisX = $data_settings['target_value_axisX'];
+
+        // Выбираем первую секунду
+        $statement = $db->select("SELECT * FROM ". $table_name
+                                ." WHERE type='value_changed'"
+                                ." ORDER BY ".$target_value_axisX
+                                ." LIMIT 1");
+        $time_range['minDate'] = $statement->fetchOne()[$target_value_axisX];
+
+        // Выбираем последнюю секунду
+        $statement = $db->select("SELECT * FROM ". $table_name
+            ." WHERE type='value_changed'"
+            ." ORDER BY ".$target_value_axisX . " DESC"
+            ." LIMIT 1");
+        $time_range['maxDate'] = $statement->fetchOne()[$target_value_axisX];
+
+
+        return $time_range;
+    }
+
+    // Возвращает данные из промежутка времени
+    public static function getDataInRange($begin, $end) {
+        $db = Db::getConnection();
+        // Получаем настройки отображения данных
+        $settingsPath = ROOT.'/config/data_settings.php';
+        $data_settings = include ($settingsPath);
+
+
+        $table_name = $data_settings['table_name'];
+        $target_values = $data_settings['target_values'];
+        $target_value_axisX = $data_settings['target_value_axisX'];
+        $count_values_to_display = $data_settings['count_values_to_display'];
+
+        $countElements = $end - $begin;
+        $additionalCondition = "";
+
+        if ($countElements > $count_values_to_display) {
+            $additionalCondition = " AND ($target_value_axisX - $begin) % "
+                                    .round($countElements/$count_values_to_display)." = 0";
+        }
+
+        $statement = $db->select("SELECT * FROM ". $table_name
+            ." WHERE type='value_changed' AND "
+            .$target_value_axisX." >= $begin AND "
+            .$target_value_axisX." <= $end" .$additionalCondition
+            ." ORDER BY ".$target_value_axisX." DESC");
+
+        $data = $statement->rows();
+
+        $data = array_reverse($data);
+
+        return self::getDataPoints($data, $target_values, $target_value_axisX);
     }
 
 }
