@@ -131,3 +131,8 @@
     display: block;
     width: 100%;
 }
+
+.watch-live.active {
+    transform: scale(0.97);
+    background-color: #ff7070;
+}

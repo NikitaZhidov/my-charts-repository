@@ -314,7 +314,7 @@ calModal.addEventListener('click', (e) => {
    calModal.classList.add('hide');
 });
 
-// При нажатии на кнопку прнять - фиксируем дату в виде надписи на кнопке
+// При нажатии на кнопку принять - фиксируем дату в виде надписи на кнопке
 document.querySelector('.cal__accept-btn').addEventListener('click', (e) => {
     calModal.classList.add('hide');
     document.body.classList.remove('lock');

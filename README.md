@@ -49,3 +49,19 @@
    ```js
    let lineChart = new Chart (ctx, chartOptions);
    ```
+ + #### Использование WebSocket
+    + В файле ***wsServer.php*** установите свободный порт
+    ```php
+    $server = IoServer::factory(
+        new HttpServer(
+            new WsServer(
+                new LiveChart()
+            )
+        ),
+        8665
+    );
+    ```
+   + Запустите сервер ***wsServer.php*** через командную строку
+   ```shell script
+   php wsServer.php
+   ```

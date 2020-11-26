@@ -80,42 +80,6 @@ class Chart
         return $data_points;
     }
 
-    // Возвращает последние $count_last_values_to_display значений
-    public static function getLatestData() {
-
-        $db = Db::getConnection();
-
-        // Получаем настройки отображения данных
-        $settingsPath = ROOT.'/config/data_settings.php';
-        $data_settings = include ($settingsPath);
-
-        // Имя таблицы
-        $table_name = $data_settings['table_name'];
-
-        // Количество отображаемых данных
-        $count_last_values_to_display = 2000;
-
-        // Целевые значения для отображения
-        $target_values = $data_settings['target_values'];
-
-        // Целевое значения для отображения на оси X
-        $target_value_axisX = $data_settings['target_value_axisX'];
-
-        //Выбираем последние данные из конца таблицы
-        $statement = $db->select("SELECT * FROM ". $table_name
-                                ." WHERE type='value_changed'"
-                                ." ORDER BY ".$target_value_axisX." DESC"
-                                ." LIMIT ".$count_last_values_to_display);
-
-        $data = $statement->rows();
-
-        // Развернем, чтобы отсортировать по времени
-        $data = array_reverse($data);
-
-        return self::getDataPoints($data, $target_values, $target_value_axisX);
-
-    }
-
     // Возвращает весь возможный временной диапазон
     public static function getTimeRange() {
         $db = Db::getConnection();
@@ -178,6 +142,12 @@ class Chart
         $data = array_reverse($data);
 
         return self::getDataPoints($data, $target_values, $target_value_axisX);
+    }
+
+    public static function getLastData() {
+        $timeRange = self::getTimeRange();
+        $range = 3600;
+        return self::getDataInRange($timeRange['maxDate'] - $range, $timeRange['maxDate']);
     }
 
 }

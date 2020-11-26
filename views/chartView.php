@@ -22,6 +22,7 @@
 
         <div class="select-wrapper">
             <div class="select-area">
+                <button class="my-btn my-btn-style watch-live">watch live</button>
                 <?php foreach ($dataPoints as $targetKey => $targetArrays): ?>
                     <button class="my-btn my-btn-style" data-value="<?php echo $targetKey; ?>"><?php echo $targetKey; ?></button>
                 <?php endforeach; ?>
@@ -44,7 +45,7 @@
                         </div>
                     </div>
                     <div class="timerange-area-row">
-                        <form action="<?php ROOT . '/public' ?>" method="post">
+                        <form>
                             <input class="timerange-input" value="<?php echo $dataPoints['stdDev'][1][0]['x']; ?>" name="timeRangeFrom" id="timeRangeFrom">
                             <input class="timerange-input" value="<?php echo $dataPoints['stdDev'][1][count($dataPoints['stdDev'][1])-1]['x']; ?>" name="timeRangeTo" id="timeRangeTo">
                             <button type="submit" class="timerange-input-btn my-btn-style">Просмотр</button>
@@ -109,9 +110,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
-
     <script type="text/javascript">
-
         // Данные
         let dataPoints = <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>;
 
@@ -128,5 +127,6 @@
     <!--  Дополнительный javascript  -->
     <script src="../resources/js/calendar.js"></script>
     <script src="../resources/js/main.js"></script>
+    <script src="../resources/js/ws.js"></script>
 </body>
 </html>

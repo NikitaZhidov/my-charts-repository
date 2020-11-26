@@ -17,7 +17,6 @@ class ChartController
         // Временной диапазон во всей таблице
         $timeRange = array();
 
-
         // Получаем минимально и максимально возможное время
         date_default_timezone_set("Europe/Moscow");
         $timeRange = Chart::getTimeRange();
@@ -42,7 +41,5 @@ class ChartController
         $_POST = array();
 
         return true;
-
     }
-
 }
