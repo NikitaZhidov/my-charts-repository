@@ -6,6 +6,7 @@ spl_autoload_register (
         '/models/',
         '/components/',
         '/controllers/',
+        '/Socket/',
     );
 
     foreach ($array_paths as $path){
@@ -14,6 +15,5 @@ spl_autoload_register (
             include_once $path;
         }
     }
-
 });
 

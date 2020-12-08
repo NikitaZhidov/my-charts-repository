@@ -1,6 +1,5 @@
 <?php
 
-
 class ChartController
 {
     private function getBeginRange() {
@@ -31,7 +30,14 @@ class ChartController
             $dataPoints = Chart::getDataInRange($timeRange['maxDate'] - 3600, $timeRange['maxDate']);
         }
 
-        
+        //temporary
+        if (array_key_exists('isTempAjax', $_POST)) {
+            $currentData = json_decode($_POST['currentData'], true);
+
+            Pusher::sendDataToServer($currentData);
+        }
+        //temporary
+
         if (array_key_exists('isAjax', $_POST)) {
             echo json_encode($dataPoints);
         } else {

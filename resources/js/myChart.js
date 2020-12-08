@@ -5,6 +5,8 @@ if (dataPoints.length < 1)
 // Буфер, хранящий промежуточные данные
 let dataBufPoints = [];
 
+const ARRAY_WITH_LAST_SECOND = 10;
+
 // Для перевода из мс в с
 const MS_IN_SECONDS = 1000;
 
@@ -78,12 +80,14 @@ const chartPlugins = {
             mode: 'x',
 
             onZoomComplete: function({chart}) {
+                //!temporary
+                watcher.stopLiveChart();
+                //!temporary
+
                 let from = chart.options.scales.xAxes[0].ticks.min;
                 let to = chart.options.scales.xAxes[0].ticks.max;
                 // Текущая область просмотра
                 let difference = to - from;
-
-                // if (isLive) switchWatchLive();
 
                 // Если текущая область просмотра меньше размера диапазона промежуточных данных
                 // то делаем асинхронный запрос и помещаем в график новые, более подробные данные
@@ -201,12 +205,18 @@ function resetData(newTargetData) {
 function liveResetData(newTargetData) {
     targetData = newTargetData;
 
-    first_tick = targetData[targetValue][1][0]['x']*MS_IN_SECONDS;
-    last_tick = targetData[targetValue][1][targetData[targetValue][1].length-1]['x']*MS_IN_SECONDS;
+    first_tick = targetData[targetValue][ARRAY_WITH_LAST_SECOND][0]['x']*MS_IN_SECONDS;
+
+    last_tick = targetData[targetValue][ARRAY_WITH_LAST_SECOND][targetData[targetValue][ARRAY_WITH_LAST_SECOND].length-1]['x']*MS_IN_SECONDS;
     ORIGINAL_VIEWPORT = last_tick - first_tick;
 
+    //temporary
+    lineChart.options.scales.xAxes[0].ticks.min = first_tick;
+    lineChart.options.scales.xAxes[0].ticks.max = last_tick;
+    //temporary
+
     lineChart.options.title.text = "Sensor data statistics" + " " + getFormattedDate(targetData[targetValue][1][1]['x']) + " - " +
-        getFormattedDate(targetData[targetValue][1][targetData[targetValue][1].length - 1]['x']);
+        getFormattedDate(targetData[targetValue][ARRAY_WITH_LAST_SECOND][targetData[targetValue][ARRAY_WITH_LAST_SECOND].length - 1]['x']);
 
     if (isBuffer)
         original_data_array_index = 1;
@@ -224,7 +234,6 @@ function liveResetData(newTargetData) {
 
 // Функция сброса увеличения
 function myResetZoom() {
-    console.log("zoom reseted");
 
     if (isBuffer) {
         isBuffer = false;

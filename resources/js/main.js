@@ -11,9 +11,10 @@ timeRangeAcceptBtn.addEventListener('click', (e) => {
     let from = document.getElementById('timeRangeFrom').value;
     let to = document.getElementById('timeRangeTo').value;
 
-    if (isLive) switchWatchLive();
+    // if (isLive) switchWatchLive();
     // Асинхронно подгружаем данные
     setAjaxData(from*MS_IN_SECONDS, to*MS_IN_SECONDS); // функция из myChart.js
+    myResetZoom();
 });
 
 selectTimeRangeBtn.addEventListener('click', (e) => {

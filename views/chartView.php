@@ -106,7 +106,6 @@
 
     <!--  Подключение необходимых библиотек  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
@@ -124,9 +123,12 @@
     <!--  Подключение js файла с диаграммой   -->
     <script src="../resources/js/myChart.js"></script>
 
-    <!--  Дополнительный javascript  -->
+<!--      Дополнительный javascript  -->
     <script src="../resources/js/calendar.js"></script>
     <script src="../resources/js/main.js"></script>
+<!--  Плагин для работы c WebSocket  -->
+    <script src="../resources/js/autobahn.js"></script>
+<!--  Работа с WebSocket  -->
     <script src="../resources/js/ws.js"></script>
 </body>
 </html>

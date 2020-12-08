@@ -147,7 +147,8 @@ class Chart
     public static function getLastData() {
         $timeRange = self::getTimeRange();
         $range = 3600;
-        return self::getDataInRange($timeRange['maxDate'] - $range, $timeRange['maxDate']);
+        $random_num = rand(0, 100);
+        return self::getDataInRange($timeRange['maxDate'] - $range - $random_num, $timeRange['maxDate'] - $random_num);
     }
 
 }

@@ -12,8 +12,6 @@ class Db
         $db->database($params['dbname']);
 
         return $db;
-
-
     }
 
 }

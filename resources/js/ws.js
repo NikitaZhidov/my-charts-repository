@@ -1,63 +1,76 @@
-// ==== Работа js с WebSocket ====
+let conn = new ab.Session(
+    'ws://localhost:8010',
+    function() {
+        conn.subscribe('chartData', function(topic, data) {
+            // This is where you would add the new article to the DOM (beyond the scope of this tutorial)
+            console.log('New article published to category "' + topic + '" : ' + data.title);
+            let parsedData = JSON.parse(data.data);
+            dataPoints = parsedData;
+            liveResetData(parsedData);
+        });
+    },
+    function() {
+        console.warn('WebSocket connection closed');
+    },
+    {'skipSubprotocolCheck': true}
+);
 
-// Подключение ws
-let conn = new WebSocket('ws://localhost:8665');
-// Переменная хранящая setInterval
-let mySetInterval;
+//!temporary
+function liveWatcherCreate() {
 
-// Кнопка запускающая setInterval
-let watchLiveBtn = document.querySelector('.watch-live');
+    let watchLiveInterval;
+    let isLive = false;
 
-let isLive = false;
-
-watchLiveBtn.addEventListener('click', switchWatchLive);
-
-function switchWatchLive() {
-    if (isLive) {
-        closeWS(mySetInterval);
-        watchLiveBtn.classList.remove('active');
-    } else {
-        connectWS();
-        myResetZoom();
-        watchLiveBtn.classList.add('active');
+    function toggleLiveChart() {
+        if (isLive) {
+            stopLiveChart();
+        } else {
+            multiplier = 1;
+            startLiveChart();
+        }
+        isLive = !isLive;
     }
 
-    isLive = !isLive;
-}
-// Функция подключения к ws
-function connectWS() {
-    conn = new WebSocket('ws://localhost:8665');
+    function startLiveChart() {
+        watchLiveInterval = setInterval(() => {
+            sendAjaxRequest();
+        }, 1000)
+    }
 
-    mySetInterval = setInterval(() => {
-        conn.send("");
-    }, 1000);
-}
+    function stopLiveChart() {
+        clearInterval(watchLiveInterval);
+    }
 
-// Функция отключения ws
-function closeWS(interval) {
-    conn.close();
-    clearInterval(interval);
-}
+    function sendAjaxRequest() {
+        let xhr = new XMLHttpRequest();
 
-conn.onopen = function(e) {
-    console.log("Connection established!");
-};
+        xhr.onload = () => {
+        };
 
-// Обновляем dataPoints
-conn.onmessage = function(e) {
-    dataPoints = JSON.parse(e.data);
-    liveResetData(dataPoints);
-};
+        xhr.open('POST', "index.php");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        let token = "SOME_TOKEN";
+        xhr.setRequestHeader("X-CSRF-Token", token);
+        let currentData = JSON.stringify(dataPoints);
+        xhr.send(`currentData=${currentData}&isTempAjax=true`);
+    }
 
-conn.onerror = (e) => {
-    clearInterval(mySetInterval);
-}
-
-conn.onclose = (e) => {
-    clearInterval(mySetInterval);
+    return {
+        startLiveChart,
+        stopLiveChart,
+        toggleLiveChart,
+    }
 }
 
+const watcher = liveWatcherCreate();
 
+let watchLiveBtn = document.querySelector('.watch-live');
+
+watchLiveBtn.addEventListener('click', () => {
+    watcher.toggleLiveChart();
+    watchLiveBtn.classList.toggle('active');
+});
+//!temporary
 
 
 

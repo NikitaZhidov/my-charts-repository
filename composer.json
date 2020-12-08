@@ -1,6 +1,8 @@
 {
     "require": {
         "smi2/phpclickhouse": "^1.3",
-        "cboden/ratchet": "^0.4.3"
+        "cboden/ratchet": "^0.4.3",
+        "react/zmq": "0.2.*|0.3.*",
+        "ext-zmq": "*"
     }
 }

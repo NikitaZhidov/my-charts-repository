@@ -50,18 +50,12 @@
    let lineChart = new Chart (ctx, chartOptions);
    ```
  + #### Использование WebSocket
-    + В файле ***wsServer.php*** установите свободный порт
-    ```php
-    $server = IoServer::factory(
-        new HttpServer(
-            new WsServer(
-                new LiveChart()
-            )
-        ),
-        8665
-    );
-    ```
-   + Запустите сервер ***wsServer.php*** через командную строку
-   ```shell script
-   php wsServer.php
-   ```
+    Для работы WebSocket используются библиотеки **Ratchet** и **ZeroMQ** на сервере. 
+    Для корректной работы необходимо установить ***ZeroMQ*** на сервер.
+    + Настройки сервера находятся в ***/Socket/***
+    + Настройки клиентской части находятся в ***/resources/js/ws.js***
+    + Для запуска ws сервера используйте команду:
+        ```bash
+        php Socket/PushServer.php
+        ```
+    
